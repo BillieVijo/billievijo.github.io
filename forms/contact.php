@@ -1,41 +1,51 @@
 <?php
-  /**
-  * Requires the "PHP Email Form" library
-  * The "PHP Email Form" library is available only in the pro version of the template
-  * The library should be uploaded to: vendor/php-email-form/php-email-form.php
-  * For more info and help: https://bootstrapmade.com/php-email-form/
-  */
+if ($_SERVER['REQUEST_METHOD'] === "POST") {
+	if (empty($_POST['email'])) {
+		$emailError = 'Email can not be empty';
+	} else {
+		$email = $_POST['email'];
 
-  // Replace contact@example.com with your real receiving email address
-  $receiving_email_address = 'victormatalanaza93@gmail.com';
+		// validating the email
+		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+			$emailError = 'Invalid email';
+		}
+	}
+	if (empty($_POST['message'])) {
+		$messageError = 'Message can not be empty';
+	} else {
+		$message = $_POST['message'];
+	}
+	if (empty($emailError) && empty($messageError)) {
+		$date = date('j, F Y h:i A');
 
-  if( file_exists($php_email_form = '../assets/vendor/php-email-form/php-email-form.php' )) {
-    include( $php_email_form );
-  } else {
-    die( 'Unable to load the "PHP Email Form" Library!');
-  }
+		$emailBody = "
+			<html>
+			<head>
+				<title>$email is contacting you</title>
+			</head>
+			<body style=\"background-color:#fafafa;\">
+				<div style=\"padding:20px;\">
+					Date: <span style=\"color:#888\">$date</span>
+					<br>
+					Email: <span style=\"color:#888\">$email</span>
+					<br>
+					Message: <div style=\"color:#888\">$message</div>
+				</div>
+			</body>
+			</html>
+		";
 
-  $contact = new PHP_Email_Form;
-  $contact->ajax = true;
-  
-  $contact->to = $receiving_email_address;
-  $contact->from_name = $_POST['name'];
-  $contact->from_email = $_POST['email'];
-  $contact->subject = $_POST['subject'];
+		$headers = 	'From: Contact Form <contact@mydomain.com>' . "\r\n" .
+    				"Reply-To: $email" . "\r\n" .
+    				"MIME-Version: 1.0\r\n" . 
+					"Content-Type: text/html; charset=iso-8859-1\r\n";
 
-  // Uncomment below code if you want to use SMTP to send emails. You need to enter your correct SMTP credentials
-  /*
-  $contact->smtp = array(
-    'host' => 'example.com',
-    'username' => 'example',
-    'password' => 'pass',
-    'port' => '587'
-  );
-  */
+		$to = 'victormatalanza93@gmail.com';
+		$subject = 'Contacting you';
 
-  $contact->add_message( $_POST['name'], 'From');
-  $contact->add_message( $_POST['email'], 'Email');
-  $contact->add_message( $_POST['message'], 'Message', 10);
-
-  echo $contact->send();
+		if (mail($to, $subject, $emailBody, $headers)) {
+			$sent = true;	
+		}
+	}
+}
 ?>
