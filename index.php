@@ -114,7 +114,7 @@
               </div>
               <div class="col-lg-6">
                 <ul>
-                  <li><i class="bi bi-chevron-right"></i> <strong>Age:</strong> <span>29</span></li>
+                  <li><i class="bi bi-chevron-right"></i> <strong>Age:</strong> <span> <?php echo date('Y') - 1993; ?> </span></li>
                   <li><i class="bi bi-chevron-right"></i> <strong>Degree:</strong> <span>Bachelor Degree</span></li>
                   <li><i class="bi bi-chevron-right"></i> <strong>Email:</strong> <span>victormatalanza93@gmail.com</span></li>
                   <li><i class="bi bi-chevron-right"></i> <strong>Freelance:</strong> <span>Available</span></li>
